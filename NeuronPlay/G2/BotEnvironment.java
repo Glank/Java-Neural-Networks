@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.util.*;
 import java.io.*;
 import java.awt.event.*;
+import java.awt.image.*;
 
 public class BotEnvironment extends JFrame implements MouseListener, Runnable
 {
@@ -16,9 +17,11 @@ public class BotEnvironment extends JFrame implements MouseListener, Runnable
 	Vector<Point> food = new Vector();
 	long time = System.currentTimeMillis();
 	int generation = 0;
+	BufferedImage buffer;
 
 	public BotEnvironment(String fileName)
 	{
+		buffer = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		if(fileName == null)
 		{
 			FeedforwardNeuralNet brain = new FeedforwardNeuralNet(2,3,1,5);
@@ -113,8 +116,9 @@ public class BotEnvironment extends JFrame implements MouseListener, Runnable
 		}
 	}
 
-	public void paint(Graphics g)
+	public void paint(Graphics graphics)
 	{
+		Graphics g = buffer.getGraphics();
 		//create blank canvas
 		g.setColor(Color.WHITE);
 		g.fillRect(0,0,WIDTH, HEIGHT);
@@ -135,7 +139,7 @@ public class BotEnvironment extends JFrame implements MouseListener, Runnable
 			bots.get(i).draw(g);
 		}
 
-
+		graphics.drawImage(buffer, 0, 0, null);
 	}
 
 	public void mouseExited(MouseEvent me){}
